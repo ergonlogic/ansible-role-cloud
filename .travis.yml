@@ -26,5 +26,5 @@ install:
   - make behat
 
 script:
-  - . scripts/hacking.sh
+  - . d
   - behat --tags="~@disabled&&~@wip&&$BEHAT_TAGS"
