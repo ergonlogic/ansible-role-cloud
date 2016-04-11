@@ -22,7 +22,10 @@ env:
   - BEHAT_TAGS="~@slow"
   - BEHAT_TAGS="@slow"
 
-install:
+
+before_script:
+  - export PATH=$HOME/.local/bin:$PATH
+  - pip install --user `whoami` chube
   - make behat
 
 script:
