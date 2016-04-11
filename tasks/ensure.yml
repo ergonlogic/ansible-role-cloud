@@ -1,0 +1,10 @@
+---
+- name: Ensure the state of existing linodes
+  # ref.: http://docs.ansible.com/ansible/linode_module.html
+  linode:
+    name: "{{ item.key }}"
+    linode_id: "{{ cached_linodes[item.key] | default(omit) }}"
+    wait: yes
+    state: "{{ item.value.state | default(linode_state) }}"
+  when: cached_linodes[item.key] is defined
+  with_dict: "{{ cloud.linode }}"

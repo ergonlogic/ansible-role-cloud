@@ -1,6 +1,5 @@
 ---
 
-
 - name: Include 'get_distros' tasks
   include: get_distros.yml
   when: op == 'get_distros'
@@ -9,7 +8,15 @@
   include: inventory.yml
   when: hostvars['localhost']['groups'][''] is defined
 
-- name: Include 'linodes' tasks
-  include: linodes.yml
-  when: op == 'linodes'
+- name: Check environment for LINODE_STATE
+  set_fact:
+    linode_state: "{{ lookup('env','LINODE_STATE') | default('present', true) }}"
+
+- name: Include 'linodes ensure' task
+  include: ensure.yml
+  when: op == 'linodes' and cached_linodes != {}
+
+- name: Include 'linodes create' task
+  include: create.yml
+  when: op == 'linodes' and cloud.linodes is defined
 

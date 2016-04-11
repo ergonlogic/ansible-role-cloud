@@ -1,0 +1,30 @@
+---
+language: php
+
+dist: trusty
+
+sudo: false
+
+os:
+  - linux
+#  - osx
+
+addons:
+  apt:
+    packages:
+    - python-yaml
+    - python-jinja2
+    #- python-paramiko
+    #- python-pip
+    #- python-pycurl
+
+env:
+  - BEHAT_TAGS="~@slow"
+  - BEHAT_TAGS="@slow"
+
+install:
+  - make behat
+
+script:
+  - . scripts/hacking.sh
+  - behat --tags="~@disabled&&~@wip&&$BEHAT_TAGS"
