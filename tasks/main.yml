@@ -1,0 +1,15 @@
+---
+
+
+- name: Include 'get_distros' tasks
+  include: get_distros.yml
+  when: op == 'get_distros'
+
+- name: Include 'inventory' tasks
+  include: inventory.yml
+  when: hostvars['localhost']['groups'][''] is defined
+
+- name: Include 'linodes' tasks
+  include: linodes.yml
+  when: op == 'linodes'
+
