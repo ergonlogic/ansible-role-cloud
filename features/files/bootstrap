@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  echo "This script must be sourced. Try \". ${BASH_SOURCE[0]}\"" 1>&2
+  exit 1
+else
+  # Ensure Ansible is installed.
+  make ansible
+  # Bootstrap local Ansible install.
+  . .mk/.local/src/ansible/ansible-;atest/hacking/env-setup 2&>1 > /dev/null
+  # Bootstrap Drumkit.
+  . .mk/drumkit
+  # Set the Linode API key.
+  export LINODE_API_KEY=$(cat linode.api.key)
+fi
+
