@@ -1,33 +1,23 @@
----
 language: php
-
 dist: trusty
-
 sudo: false
-
 os:
-  - linux
-#  - osx
-
+- linux
 addons:
   apt:
     packages:
     - python-yaml
     - python-jinja2
-    #- python-paramiko
-    #- python-pip
-    #- python-pycurl
-
 env:
+  matrix:
   - BEHAT_TAGS="~@slow"
   - BEHAT_TAGS="@slow"
-
-
+  global:
+    secure: MemN7VyWE5fQnS0q843e3r7EVCcS185DJqXBlTiKoMqy/6XlAEraLZwdyHAcfqbG8aFY40XJDMaxpSebRITVPuzR6IU5uyQ1imK/fSJllLMiTjAJhK6+1QvbExEs2I6m8ymPXGJCvLFh7xSInZHMeGFEFVPB4MM425P0PoZZmR2GO8KRJuqP2egjJnkA9Wfxx60faZsBrovEtMFFSRGxnfsRW3A1/9+PA7L7Ci8yWmPtenBOWiS69gL4fmFQrALjNxqNGLU7eCsJpZCjc8LorWCofLVDg96avO9NtvWyZHEDUXtSc1qAQ3OSOi5RQUk64cpjudLXiZH8R5t3KFTDq4xVjbqTu6VlcPBmN23GAAQh3zX6pyFk4iw3gv6k9DrOFTtA+bwdjf76U95Pj2crBT9IhxF39x42Uhil9QBbNc3XIXaB0/HxzyFL3LOn06N9R9tBSgLgChELILNnri62JTCaOAbS8yKQPkrgoUjG30RKRx+Cf6MeOqlv0Y7uPGtvIU0l9D1g9kDnXhrEzRdshcuk0sHEsKxLs4ND0IxWRwg59ytdWuWQdnsplEdrjub2YxhpljQtoij/lkE3JZbDgrNGmndGYPXYX+YMSrXA/pOVlWo0EklPneH/kHG4qLOgNd/d1MkO61zF+xjvKkhi3PYCwYmxjTGn0oS74goZs2I=
 before_script:
-  - export PATH=$HOME/.local/bin:$PATH
-  - pip install --user `whoami` chube
-  - make behat
-
+- export PATH=$HOME/.local/bin:$PATH
+- pip install --user `whoami` chube
+- make behat
 script:
-  - . d
-  - behat --tags="~@disabled&&~@wip&&$BEHAT_TAGS"
+- ". d"
+- behat --tags="~@disabled&&~@wip&&$BEHAT_TAGS"

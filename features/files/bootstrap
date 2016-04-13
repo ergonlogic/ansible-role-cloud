@@ -7,10 +7,14 @@ else
   # Ensure Ansible is installed.
   make ansible
   # Bootstrap local Ansible install.
-  . .mk/.local/src/ansible/ansible-;atest/hacking/env-setup 2&>1 > /dev/null
+  . .mk/.local/src/ansible/ansible-latest/hacking/env-setup 2>&1 > /dev/null
   # Bootstrap Drumkit.
   . .mk/drumkit
   # Set the Linode API key.
-  export LINODE_API_KEY=$(cat linode.api.key)
+  if [[ -f linode.api.key ]]; then
+    export LINODE_API_KEY=$(cat linode.api.key)
+  else
+    echo "No 'linode.api.key' file found. LINODE_API_KEY must be set by another method." 1>&2
+  fi
 fi
 
