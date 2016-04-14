@@ -17,11 +17,17 @@ help-linodes:
 	@echo "make linodes-destroy"
 	@echo "  Destroy all defined Linode servers."
 
-linodes-test:
-	behat --tags=~wip
+features/files/roles/ergonlogic.cloud:
+	cd features/files/roles && \
+  ln -s ../../.. ergonlogic.cloud
 
-linodes-test-wip:
+linodes-test: features/files/roles/ergonlogic.cloud
+	behat --tags=~wip
+	rm features/files/roles/ergonlogic.cloud
+
+linodes-test-wip: features/files/roles/ergonlogic.cloud
 	behat --tags=wip
+	rm features/files/roles/ergonlogic.cloud
 
 linodes-distros: ansible
 	ansible-playbook $(CLOUD_PLAYBOOK) -e "op=get_distros"
