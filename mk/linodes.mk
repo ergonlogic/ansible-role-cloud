@@ -1,5 +1,6 @@
 CLOUD_PLAYBOOK   ?= hosts/localhost.yml
 LINODE_INVENTORY ?= ./files/inventory/linode.py
+BEHAT_TAGS_REAL  ?= $(if $(BEHAT_TAGS), '&&$(BEHAT_TAGS)')
 
 .PHONY: linodes-distros
 
@@ -19,14 +20,14 @@ help-linodes:
 
 features/files/roles/ergonlogic.cloud:
 	cd features/files/roles && \
-  ln -s ../../.. ergonlogic.cloud
+    ln -s ../../.. ergonlogic.cloud
 
 linodes-test: features/files/roles/ergonlogic.cloud
-	behat --tags=~wip
+	behat --tags="~wip&&~disabled$(BEHAT_TAGS_REAL)"
 	rm features/files/roles/ergonlogic.cloud
 
 linodes-test-wip: features/files/roles/ergonlogic.cloud
-	behat --tags=wip
+	behat --tags="wip&&~disabled$(BEHAT_TAGS_REAL)"
 	rm features/files/roles/ergonlogic.cloud
 
 linodes-distros: ansible
