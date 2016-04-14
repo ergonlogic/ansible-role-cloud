@@ -40,7 +40,7 @@ Include in localhost as you would any other cloud role.
       vars:
         ...
         cloud:
-          linodes:
+          linode:
             test1:
               plan: 1          # Linode 1024
               datacenter: 2    # Dallas, TX
@@ -69,7 +69,7 @@ Alternatively, you can keep VM definitions in a separate file, like so:
 
     # File: ./cloud.yml
     cloud:
-      linodes:
+      linode:
         test1:
           plan: 1          # Linode 1024
           datacenter: 2    # Dallas, TX
@@ -77,8 +77,16 @@ Alternatively, you can keep VM definitions in a separate file, like so:
           state: "running"
         test2: {}          # Use defaults.
         ...
- 
 
+
+TODO
+----
+
+* Add linodes/inventory grouping
+* Add (and test) sanity check that:
+  * Two or more linodes don't share a human-readable name (could cause undefined behaviour)
+* Emit warning if linodes exist that are not defined in the manifest
+* Add more specific checks when testing linode creation (size, distro, etc.)
 
 License
 -------

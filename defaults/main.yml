@@ -1,8 +1,8 @@
 ---
 
 op: 'linodes'
+linode_state: 'present'
 
 cloud: []
 cached_linodes: {}
-
 

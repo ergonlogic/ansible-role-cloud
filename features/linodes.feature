@@ -12,7 +12,7 @@ Feature: Deploy and manage servers on Linode
        140: Debian 8
        """
 
-  Scenario: Create a Linode server
+  Scenario: Call a command to ensure the proper state of all defined linodes.
      When I run "make linodes-force --dry-run"
      Then I should get:
        """
@@ -38,7 +38,7 @@ Feature: Deploy and manage servers on Linode
        skipping: [localhost]
        """
 
-  Scenario: Destroy a Linode server
+  Scenario: Call a command to destroy all defined linodes.
      When I run "make linodes-destroy-force --dry-run"
      Then I should get:
        """
@@ -65,3 +65,9 @@ Feature: Deploy and manage servers on Linode
        skipping: [localhost]
        """
 
+  @slow @wip
+  Scenario: Test creating and destroying linodes.
+     When I run "ansible-playbook features/files/hosts/test.yml -e 'confirm=y' -e 'op=linodes'"
+     Then I should get:
+       """
+       """

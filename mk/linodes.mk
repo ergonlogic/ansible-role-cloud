@@ -27,7 +27,12 @@ linodes-test: features/files/roles/ergonlogic.cloud
 	rm features/files/roles/ergonlogic.cloud
 
 linodes-test-wip: features/files/roles/ergonlogic.cloud
-	behat --tags="wip&&~disabled$(BEHAT_TAGS_REAL)"
+	#behat --tags="wip&&~disabled$(BEHAT_TAGS_REAL)"
+
+linodes-test-slow: features/files/roles/ergonlogic.cloud
+	ansible-playbook features/files/hosts/test0.yml -e 'confirm=y' -e 'op=linodes'
+	ansible-playbook features/files/hosts/test1.yml -e 'confirm=y' -e 'op=linodes'
+	ansible-playbook features/files/hosts/test2.yml -e 'confirm=y' -e 'op=linodes'
 	rm features/files/roles/ergonlogic.cloud
 
 linodes-distros: ansible

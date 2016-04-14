@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+  - cloud:
+      linode:
+        test1: {}
+        test2: {}
+
+  roles:
+  - ergonlogic.cloud
+
+  tasks:
+
+  #### Create 2 test linodes, as listed in the 'cloud' manifest above.  ####
+
+  - name: Check inventory.
+    shell: inventory/linode.py --refresh-cache
+    changed_when: False
+    register: linodes_ansible_inventory
+
+  - name: Assert that both 'test1' and 'test2' appear in the inventory.
+    assert:
+      that:
+      - "'test1' in linodes_ansible_inventory.stdout"
+      - "'test2' in linodes_ansible_inventory.stdout"
+
+  - name: Query Linodes API.
+    uri:
+      url: "https://api.linode.com/?api_key={{ lookup('env', 'LINODE_API_KEY') }}&api_action=linode.list"
+      return_content: yes
+    register: linodes_api_inventory
+
+  - name: Assert that both 'test1' and 'test2' appear in the API response.
+    assert:
+      that:
+      - "'test1' in linodes_api_inventory.content"
+      - "'test2' in linodes_api_inventory.content"
+

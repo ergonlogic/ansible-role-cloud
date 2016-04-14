@@ -10,7 +10,7 @@
 
 - name: Check environment for LINODE_STATE
   set_fact:
-    linode_state: "{{ lookup('env','LINODE_STATE') | default('present', true) }}"
+    linode_state: "{{ lookup('env','LINODE_STATE') | default(linode_state, true) }}"
 
 - name: Include 'linodes ensure' task
   include: ensure.yml
@@ -18,5 +18,5 @@
 
 - name: Include 'linodes create' task
   include: create.yml
-  when: op == 'linodes' and cloud.linodes is defined
+  when: op == 'linodes' and cloud.linode is defined
 
