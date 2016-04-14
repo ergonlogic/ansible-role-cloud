@@ -22,11 +22,6 @@ Feature: Deploy and manage servers on Linode
       And I run "ansible-playbook features/files/hosts/localhost.yml -e'confirm=y' --check"
      Then I should get:
        """
-       PLAY ***************************************************************************
-
-       TASK [setup] *******************************************************************
-       ok: [localhost]
-
        TASK [ergonlogic.cloud : Include 'get_distros' tasks] **************************
        skipping: [localhost]
 
@@ -41,9 +36,6 @@ Feature: Deploy and manage servers on Linode
 
        TASK [ergonlogic.cloud : Include 'linodes create' task] ************************
        skipping: [localhost]
-
-       PLAY RECAP *********************************************************************
-       localhost                  : ok=2    changed=0    unreachable=0    failed=0   
        """
 
   Scenario: Destroy a Linode server
@@ -57,11 +49,6 @@ Feature: Deploy and manage servers on Linode
       And I run "LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -e'confirm=y' --check"
      Then I should get:
        """
-       PLAY ***************************************************************************
-
-       TASK [setup] *******************************************************************
-       ok: [localhost]
-
        TASK [ergonlogic.cloud : Include 'get_distros' tasks] **************************
        skipping: [localhost]
 
@@ -76,8 +63,5 @@ Feature: Deploy and manage servers on Linode
 
        TASK [ergonlogic.cloud : Include 'linodes create' task] ************************
        skipping: [localhost]
-
-       PLAY RECAP *********************************************************************
-       localhost                  : ok=2    changed=0    unreachable=0    failed=0   
        """
 
