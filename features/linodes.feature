@@ -31,10 +31,10 @@ Feature: Deploy and manage servers on Linode
        TASK [ergonlogic.cloud : Check environment for LINODE_STATE] *******************
        ok: [localhost]
 
-       TASK [ergonlogic.cloud : Include 'linodes ensure' task] ************************
+       TASK [ergonlogic.cloud : Include tasks to create missing linodes] **************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include 'linodes create' task] ************************
+       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of linodes] ***
        skipping: [localhost]
        """
 
@@ -58,16 +58,10 @@ Feature: Deploy and manage servers on Linode
        TASK [ergonlogic.cloud : Check environment for LINODE_STATE] *******************
        ok: [localhost]
 
-       TASK [ergonlogic.cloud : Include 'linodes ensure' task] ************************
+       TASK [ergonlogic.cloud : Include tasks to create missing linodes] **************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include 'linodes create' task] ************************
+       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of linodes] ***
        skipping: [localhost]
        """
 
-  @slow @wip
-  Scenario: Test creating and destroying linodes.
-     When I run "ansible-playbook features/files/hosts/test.yml -e 'confirm=y' -e 'op=linodes'"
-     Then I should get:
-       """
-       """
