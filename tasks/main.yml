@@ -6,17 +6,17 @@
 
 - name: Include 'inventory' tasks
   include: inventory.yml
-  when: hostvars['localhost']['groups'][''] is defined
+  when: hostvars['localhost']['groups']['linode'] is defined
 
 - name: Check environment for LINODE_STATE
   set_fact:
     linode_state: "{{ lookup('env','LINODE_STATE') | default(linode_state, true) }}"
 
-- name: Include 'linodes ensure' task
-  include: ensure.yml
-  when: op == 'linodes' and cached_linodes != {}
-
-- name: Include 'linodes create' task
+- name: Include tasks to create missing linodes
   include: create.yml
   when: op == 'linodes' and cloud.linode is defined
+
+- name: Include tasks to ensure the proper state and group of linodes
+  include: ensure.yml
+  when: op == 'linodes' and cached_linodes != {}
 

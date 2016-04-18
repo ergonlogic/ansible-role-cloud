@@ -4,5 +4,5 @@
   set_fact:
     # Strip the ID from the label, to get the name, then map to the ID.
     cached_linodes: "{{ cached_linodes | combine( {hostvars[item].label|regex_replace('^[^_]*_',''): hostvars[item].api_id} ) }}"
-  with_items: "{{ hostvars['localhost']['groups'][''] }}"
+  with_items: "{{ hostvars['localhost']['groups']['linode'] }}"
 

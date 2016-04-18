@@ -20,3 +20,12 @@
     state: "{{ item.value.state | default(linode_state) }}"
   when: cached_linodes[item.key] is not defined
   with_dict: "{{ cloud.linode }}"
+  register: new_linodes
+
+- name: Add newly created linodes to cached inventory
+  set_fact:
+    # Strip the ID from the label, to get the name, then map to the ID.
+    cached_linodes: "{{ cached_linodes | combine( { item.item.key : item.instance.id } ) }}"
+  when: cached_linodes[item.item.key] is not defined
+  with_items: "{{ new_linodes.results }}"
+

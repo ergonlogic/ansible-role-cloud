@@ -5,10 +5,6 @@ BEHAT_TAGS_REAL  ?= $(if $(BEHAT_TAGS), '&&$(BEHAT_TAGS)')
 .PHONY: linodes-distros
 
 help-linodes:
-	@echo "make linodes-help"
-	@echo "  Print this help message."
-	@echo "make linodes-test"
-	@echo "  Run Behat tests."
 	@echo "make linodes-distros"
 	@echo "  Print a list of distributions available on Linode."
 	@echo "make linodes-inventory"
