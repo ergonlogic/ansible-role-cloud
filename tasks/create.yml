@@ -26,6 +26,6 @@
   set_fact:
     # Strip the ID from the label, to get the name, then map to the ID.
     cached_linodes: "{{ cached_linodes | combine( { item.item.key : item.instance.id } ) }}"
-  when: cached_linodes[item.item.key] is not defined
+  when: cached_linodes[item.item.key] is not defined and item.instance.id is defined
   with_items: "{{ new_linodes.results }}"
 
