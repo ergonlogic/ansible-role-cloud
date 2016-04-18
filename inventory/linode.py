@@ -232,8 +232,15 @@ class LinodeInventory(object):
         # Inventory: Group by datacenter city
         self.push(self.inventory, self.get_datacenter_city(node), dest)
 
-        # Inventory: Group by dipslay group
+        # Inventory: Group by display group
         self.push(self.inventory, node.display_group, dest)
+
+        # Inventory: Add to 'all' group
+        self.push(self.inventory, 'all', dest)
+
+        # Inventory: A group of all linode instances
+        self.push(self.inventory, 'linode', dest)
+
 
     def get_host_info(self):
         """Get variables about a specific host."""
