@@ -8,3 +8,17 @@
     state: "{{ item.value.state | default(linode_state) }}"
   when: cached_linodes[item.key] is defined
   with_dict: "{{ cloud.linode }}"
+
+- name: Look up Linode API key from environment.
+  set_fact:
+    api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
+  when: api_key is not defined
+
+- name: Ensure that the proper group is assigned to linodes
+  uri:
+    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=linode.update&LinodeID={{ cached_linodes[item.key] }}&lpm_displayGroup={{ item.value.group }}"
+  when: cached_linodes[item.key] is defined and item.value.group is defined
+  with_dict: "{{ cloud.linode }}"
+  register: groups_api_result
+  failed_when: groups_api_result.json.ERRORARRAY != []
+
