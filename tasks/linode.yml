@@ -1,5 +1,9 @@
 ---
 
+- name: Include 'get_distros' tasks
+  include: linode/get_distros.yml
+  when: op == 'get_distros'
+
 - name: Include 'inventory' tasks
   include: linode/inventory.yml
   when: hostvars['localhost']['groups']['linode'] is defined
