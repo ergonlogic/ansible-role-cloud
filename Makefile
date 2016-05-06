@@ -1,10 +1,10 @@
 CLOUD_PLAYBOOK   ?= features/files/hosts/localhost.yml
 LINODE_INVENTORY ?= inventory/linode.py
 
-test: linodes-test
-test-wip: linodes-test-wip
+test: linode-test
+test-wip: linode-test-wip
 
-include mk/linodes.mk
+include mk/linode.mk
 include .mk/GNUmakefile
 
 # vi:syntax=makefile

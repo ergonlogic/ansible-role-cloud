@@ -1,8 +1,8 @@
 ---
 
-op: 'linodes'
+op: 'linode'
 linode_state: 'present'
 
 cloud: []
-cached_linodes: {}
+cached_linode_vms: {}
 

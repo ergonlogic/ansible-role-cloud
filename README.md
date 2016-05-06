@@ -82,7 +82,6 @@ Alternatively, you can keep VM definitions in a separate file, like so:
 TODO
 ----
 
-* Add linodes/inventory grouping
 * Add (and test) sanity check that:
   * Two or more linodes don't share a human-readable name (could cause undefined behaviour)
 * Emit warning if linodes exist that are not defined in the manifest

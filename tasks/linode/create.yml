@@ -8,7 +8,7 @@
     - '~/.ssh/id_rsa.pub'
     skip: true
 
-- name: Create missing linodes
+- name: Create missing Linode VMs
   # ref.: http://docs.ansible.com/ansible/linode_module.html
   linode:
     name: "{{ item.key }}"
@@ -18,14 +18,14 @@
     ssh_pub_key: "{{ ssh_pub_key | default(omit) }}"
     wait: yes
     state: "{{ item.value.state | default(linode_state) }}"
-  when: cached_linodes[item.key] is not defined
+  when: cached_linode_vms[item.key] is not defined
   with_dict: "{{ cloud.linode }}"
-  register: new_linodes
+  register: new_linode_vms
 
-- name: Add newly created linodes to cached inventory
+- name: Add newly created Linode VMs to cached inventory
   set_fact:
     # Strip the ID from the label, to get the name, then map to the ID.
-    cached_linodes: "{{ cached_linodes | combine( { item.item.key : item.instance.id } ) }}"
-  when: cached_linodes[item.item.key] is not defined and item.instance.id is defined
-  with_items: "{{ new_linodes.results }}"
+    cached_linode_vms: "{{ cached_linode_vms | combine( { item.item.key : item.instance.id } ) }}"
+  when: cached_linode_vms[item.item.key] is not defined and item.instance.id is defined
+  with_items: "{{ new_linode_vms.results }}"
 

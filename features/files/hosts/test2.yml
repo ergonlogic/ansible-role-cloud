@@ -14,29 +14,29 @@
 
   tasks:
 
-  #### Remove the last test linode, by setting the default state to 'absent'.  ####
+  #### Remove the last test Linode VM, by setting the default state to 'absent'.  ####
 
   - name: Check inventory.
     shell: inventory/linode.py --refresh-cache
     changed_when: False
-    register: linodes_ansible_inventory
+    register: linode_ansible_inventory
 
   - name: Assert that neither 'test1' nor 'test2' appear in the inventory.
     assert:
       that:
-      - "'test1' not in linodes_ansible_inventory.stdout"
-      - "'test2' not in linodes_ansible_inventory.stdout"
-      - linodes_ansible_inventory.stdout == '{}'
+      - "'test1' not in linode_ansible_inventory.stdout"
+      - "'test2' not in linode_ansible_inventory.stdout"
+      - linode_ansible_inventory.stdout == '{}'
 
-  - name: Query Linodes API.
+  - name: Query Linode API.
     uri:
       url: "https://api.linode.com/?api_key={{ lookup('env', 'LINODE_API_KEY') }}&api_action=linode.list"
       return_content: yes
-    register: linodes_api_inventory
+    register: linode_api_inventory
 
   - name: Assert that neither 'test1' nor 'test2' appear in the API response.
     assert:
       that:
-      - "'test1' not in linodes_api_inventory.content"
-      - "'test2' not in linodes_api_inventory.content"
+      - "'test1' not in linode_api_inventory.content"
+      - "'test2' not in linode_api_inventory.content"
 

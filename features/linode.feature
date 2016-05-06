@@ -4,7 +4,7 @@ Feature: Deploy and manage servers on Linode
   I need to be able to easily work with the Linode API
 
   Scenario: Get a list of Linode distributions and their IDs
-     When I run "make linodes-distros"
+     When I run "make linode-distros"
      Then I should get:
        """
        ansible-playbook features/files/hosts/localhost.yml -e "op=get_distros"
@@ -12,8 +12,8 @@ Feature: Deploy and manage servers on Linode
        140: Debian 8
        """
 
-  Scenario: Call a command to ensure the proper state of all defined linodes.
-     When I run "make linodes-force --dry-run"
+  Scenario: Call a command to ensure the proper state of all defined Linode VMs.
+     When I run "make linode-force --dry-run"
      Then I should get:
        """
        inventory/linode.py --refresh-cache > /dev/null
@@ -31,15 +31,15 @@ Feature: Deploy and manage servers on Linode
        TASK [ergonlogic.cloud : Check environment for LINODE_STATE] *******************
        ok: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to create missing linodes] **************
+       TASK [ergonlogic.cloud : Include tasks to create missing Linode VMs] ***********
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of linodes] ***
+       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of Linode VMs] ***
        skipping: [localhost]
        """
 
-  Scenario: Call a command to destroy all defined linodes.
-     When I run "make linodes-destroy-force --dry-run"
+  Scenario: Call a command to destroy all defined Linode VMs.
+     When I run "make linode-destroy-force --dry-run"
      Then I should get:
        """
        inventory/linode.py --refresh-cache > /dev/null
@@ -58,10 +58,10 @@ Feature: Deploy and manage servers on Linode
        TASK [ergonlogic.cloud : Check environment for LINODE_STATE] *******************
        ok: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to create missing linodes] **************
+       TASK [ergonlogic.cloud : Include tasks to create missing Linode VMs] ***********
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of linodes] ***
+       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of Linode VMs] ***
        skipping: [localhost]
        """
 

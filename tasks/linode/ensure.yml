@@ -1,12 +1,12 @@
 ---
-- name: Ensure the state of existing linodes
+- name: Ensure the state of existing Linode VMs
   # ref.: http://docs.ansible.com/ansible/linode_module.html
   linode:
     name: "{{ item.key }}"
-    linode_id: "{{ cached_linodes[item.key] | default(omit) }}"
+    linode_id: "{{ cached_linode_vms[item.key] | default(omit) }}"
     wait: yes
     state: "{{ item.value.state | default(linode_state) }}"
-  when: cached_linodes[item.key] is defined
+  when: cached_linode_vms[item.key] is defined
   with_dict: "{{ cloud.linode }}"
 
 - name: Look up Linode API key from environment.
@@ -14,10 +14,10 @@
     api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
   when: api_key is not defined
 
-- name: Ensure that the proper group is assigned to linodes
+- name: Ensure that the proper group is assigned to Linode VMs
   uri:
-    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=linode.update&LinodeID={{ cached_linodes[item.key] }}&lpm_displayGroup={{ item.value.group }}"
-  when: cached_linodes[item.key] is defined and item.value.group is defined
+    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=linode.update&LinodeID={{ cached_linode_vms[item.key] }}&lpm_displayGroup={{ item.value.group }}"
+  when: cached_linode_vms[item.key] is defined and item.value.group is defined
   with_dict: "{{ cloud.linode }}"
   register: groups_api_result
   failed_when: groups_api_result.json.ERRORARRAY != []
