@@ -14,9 +14,9 @@
 
 - name: Include tasks to create missing Linode VMs
   include: linode/create.yml
-  when: op == 'linode' and cloud.linode is defined
+  when: (op == 'linode') and (cloud.linode is defined)
 
 - name: Include tasks to ensure the proper state and group of Linode VMs
   include: linode/ensure.yml
-  when: op == 'linode' and cached_linode_vms != {}
+  when: (op == 'linode') and (cloud.linode is defined) and (cached_linode_vms != {})
 
