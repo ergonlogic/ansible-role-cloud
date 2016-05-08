@@ -238,6 +238,9 @@ class LinodeInventory(object):
         # Inventory: Add to 'all' group
         self.push(self.inventory, 'all', dest)
 
+        # Inventory: Add to 'linode' group
+        self.push(self.inventory, 'cloud', dest)
+
         # Inventory: A group of all linode instances
         self.push(self.inventory, 'linode', dest)
 
@@ -298,6 +301,9 @@ class LinodeInventory(object):
 
         if private_ips:
             node_vars["private_ip"] = private_ips[0]
+
+        id_length = len(str(node_vars['api_id']))
+        node_vars['linode_name'] = node_vars['label'][id_length+1:]
 
         return self.json_format_dict(node_vars, True)
 
