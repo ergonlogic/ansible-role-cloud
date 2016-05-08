@@ -1,5 +1,5 @@
 CLOUD_PLAYBOOK   ?= hosts/localhost.yml
-LINODE_INVENTORY ?= ./files/inventory/linode.py
+LINODE_INVENTORY ?= inventory/linode.py
 BEHAT_TAGS_REAL  ?= $(if $(BEHAT_TAGS), '&&$(BEHAT_TAGS)')
 
 .PHONY: linode-distros linode-inventory
