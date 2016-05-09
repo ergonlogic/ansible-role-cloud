@@ -6,7 +6,7 @@
 
 - name: Include 'inventory' tasks
   include: linode/inventory.yml
-  when: hostvars['localhost']['groups']['linode'] is defined
+  when: groups['linode'] is defined
 
 - name: Check environment for LINODE_STATE
   set_fact:

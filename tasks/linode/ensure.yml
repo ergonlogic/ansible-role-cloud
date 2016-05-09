@@ -6,6 +6,7 @@
     linode_id: "{{ cached_linode_vms[item.key] | default(omit) }}"
     wait: yes
     state: "{{ item.value.state | default(linode_state) }}"
+  register: existing_linode_vms
   when: cached_linode_vms[item.key] is defined
   with_dict: "{{ cloud.linode }}"
 
@@ -16,9 +17,9 @@
 
 - name: Ensure that the proper group is assigned to Linode VMs
   uri:
-    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=linode.update&LinodeID={{ cached_linode_vms[item.key] }}&lpm_displayGroup={{ item.value.group }}"
-  when: cached_linode_vms[item.key] is defined and item.value.group is defined
-  with_dict: "{{ cloud.linode }}"
+    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=linode.update&LinodeID={{ item.instance.id }}&lpm_displayGroup={{ item.item.value.group }}"
+  when: (item.instance.status == 'Running') and (item.item.value.group is defined)
+  with_items: "{{ existing_linode_vms.results }}"
   register: groups_api_result
   failed_when: groups_api_result.json.ERRORARRAY != []
 

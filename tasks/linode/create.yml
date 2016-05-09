@@ -24,8 +24,15 @@
 
 - name: Add newly created Linode VMs to cached inventory
   set_fact:
-    # Strip the ID from the label, to get the name, then map to the ID.
     cached_linode_vms: "{{ cached_linode_vms | combine( { item.item.key : item.instance.id } ) }}"
-  when: cached_linode_vms[item.item.key] is not defined and item.instance.id is defined
+  when: cached_linode_vms[item.item.key] is not defined and item.changed
   with_items: "{{ new_linode_vms.results }}"
 
+- name: Add newly created Linode VMs to groups/inventory
+  add_host:
+    hostname: "{{ item.instance.name }}"
+    groups: "all,cloud,linode,{{ item.item.value.group|default('all') }}"
+    ansible_host: "{{ item.instance.ipv4 }}"
+    linode_name: "{{ item.item.key }}"
+  when: item.changed
+  with_items: "{{ new_linode_vms.results }}"
