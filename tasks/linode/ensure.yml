@@ -12,12 +12,12 @@
 
 - name: Look up Linode API key from environment.
   set_fact:
-    api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
-  when: api_key is not defined
+    linode_api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
+  when: linode_api_key is not defined
 
 - name: Ensure that the proper group is assigned to Linode VMs
   uri:
-    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=linode.update&LinodeID={{ item.instance.id }}&lpm_displayGroup={{ item.item.value.group }}"
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=linode.update&LinodeID={{ item.instance.id }}&lpm_displayGroup={{ item.item.value.group }}"
   when: (item.instance.status == 'Running') and (item.item.value.group is defined)
   with_items: "{{ existing_linode_vms.results }}"
   register: groups_api_result

@@ -2,7 +2,8 @@
 
 - name: Look up Linode API key from environment.
   set_fact:
-    api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
+    linode_api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
+  when: linode_api_key is not defined
 
 - name: Add header for distro list.
   set_fact:
@@ -10,7 +11,7 @@
 
 - name: Make call to Linode API.
   uri:
-    url: "https://api.linode.com/?api_key={{ api_key }}&api_action=avail.distributions"
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=avail.distributions"
     return_content: yes
   register: distros_from_api
 
