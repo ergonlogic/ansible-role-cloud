@@ -4,4 +4,4 @@ cloud: []
 op: 'linode'
 linode_set_hostnames: True
 linode_manage_hostname_dns_records: True
-
+linode_state: 'present'
