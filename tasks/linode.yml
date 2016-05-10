@@ -10,7 +10,7 @@
 
 - name: Check environment for LINODE_STATE
   set_fact:
-    linode_state: "{{ lookup('env','LINODE_STATE') | default(linode_state, true) }}"
+    linode_state: "{{ lookup('env','LINODE_STATE') | default('present', True) }}"
 
 - name: Include tasks to create missing Linode VMs
   include: linode/create.yml

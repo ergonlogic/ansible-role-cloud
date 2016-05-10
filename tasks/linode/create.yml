@@ -18,7 +18,7 @@
     ssh_pub_key: "{{ ssh_pub_key | default(omit) }}"
     wait: yes
     state: "{{ item.value.state | default(linode_state) }}"
-  when: cached_linode_vms[item.key] is not defined
+  when: (item.value.state|default(linode_state) != 'absent') and (cached_linode_vms[item.key] is not defined)
   with_dict: "{{ cloud.linode }}"
   register: new_linode_vms
 
