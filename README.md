@@ -25,11 +25,19 @@ A list of virtual machines and their attributes. Since Ansible cloud modules run
 
     linode_set_hostnames: True
 
-Sets whether to set hostnames and build /etc/hosts on Linode VMs.
+Sets whether to set hostnames and build /etc/hosts on Linode VMs. Defaults to 'True'.
 
     linode_manage_hostname_dns_records: True
 
-Sets whether to create and manage default DNS records for hostnames of Linode VMs.
+Sets whether to create and manage default DNS records for hostnames of Linode VMs. Defaults to 'True'.
+
+    linode_zone: example.com
+
+The DNS zone to create in the Linode DNS Manager, and to use in building Linode VM FQDNs.
+
+    linode_zone_soa_email: user@example.com
+
+SOA Email record for the specified zone.
 
     linode_state: 'present'
 
