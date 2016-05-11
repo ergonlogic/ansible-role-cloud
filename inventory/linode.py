@@ -218,6 +218,12 @@ class LinodeInventory(object):
         location = location.split(",")[0]
         return location
 
+    def get_linode_name(self, node):
+        """Returns the Linode name of the node."""
+        id_length = len(str(node.api_id))
+        linode_name = node.label[id_length+1:]
+        return linode_name
+
     def add_node(self, node):
         """Adds an node to the inventory and index."""
 
@@ -228,6 +234,9 @@ class LinodeInventory(object):
 
         # Inventory: Group by node ID (always a group of 1)
         self.inventory[node.api_id] = [dest]
+
+        # Inventory: Group by linode_name (always a group of 1)
+        self.inventory[self.get_linode_name(node)] = [dest]
 
         # Inventory: Group by datacenter city
         self.push(self.inventory, self.get_datacenter_city(node), dest)
@@ -302,8 +311,7 @@ class LinodeInventory(object):
         if private_ips:
             node_vars["private_ip"] = private_ips[0]
 
-        id_length = len(str(node_vars['api_id']))
-        node_vars['linode_name'] = node_vars['label'][id_length+1:]
+        node_vars['linode_name'] = self.get_linode_name(node)
 
         return self.json_format_dict(node_vars, True)
 
