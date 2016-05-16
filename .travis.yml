@@ -21,3 +21,5 @@ before_script:
 script:
 - ". d"
 - make $TEST_TARGET
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
