@@ -26,7 +26,6 @@
       that:
       - "'test1' not in linode_ansible_inventory.stdout"
       - "'test2' not in linode_ansible_inventory.stdout"
-      - linode_ansible_inventory.stdout == '{}'
 
   - name: Query Linode API.
     uri:
