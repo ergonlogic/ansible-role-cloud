@@ -22,9 +22,9 @@
 
 - name: Include tasks to set hostnames of Linode VMs
   include: linode/hostnames.yml
-  when: linode_set_hostnames and (cloud.linode is defined) and (cached_linode_vms != {}) and (linode_zone is defined)
+  when: linode_set_hostnames and (cloud.linode is defined) and (linode_zone is defined)
 
 - name: Include tasks to add hostname DNS entries for Linode VMs
   include: linode/domains.yml
-  when: linode_manage_hostname_dns_records and (cloud.linode is defined) and (cached_linode_vms != {}) and (linode_zone is defined)
+  when: linode_manage_hostname_dns_records and (cloud.linode is defined) and (linode_zone is defined)
 

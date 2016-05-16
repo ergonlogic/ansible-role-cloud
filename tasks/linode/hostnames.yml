@@ -8,40 +8,40 @@
 
 - name: Set or update hostname.
   hostname:
-    name: "{{ hostvars[item.instance.name].linode_name }}"
-  delegate_to: "{{ hostvars[item.instance.name].ansible_host }}"
-  when: item.instance.status == 'Running'
-  with_items: "{{ existing_linode_vms.results }}"
+    name: "{{ hostvars[item].linode_name }}"
+  when: hostvars[item].status == 1
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['linode'] }}"
 
 - name: Update /etc/hostname.
   copy:
-    content: "{{ hostvars[item.instance.name].linode_name }}"
+    content: "{{ hostvars[item].linode_name }}"
     dest: /etc/hostname
     owner: root
     group: root
     mode: 0644
-  delegate_to: "{{ hostvars[item.instance.name].ansible_host }}"
-  when: item.instance.status == 'Running'
-  with_items: "{{ existing_linode_vms.results }}"
+  when: hostvars[item].status == 1
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['linode'] }}"
 
 - name: Update /etc/hosts with localhost.
   lineinfile:
     dest: /etc/hosts
     regexp: "^127.0.0.1"
-    line: "127.0.0.1 {{ hostvars[item.instance.name].linode_name }}.{{ linode_zone }} {{ hostvars[item.instance.name].linode_name }} localhost"
-  delegate_to: "{{ hostvars[item.instance.name].ansible_host }}"
-  when: item.instance.status == 'Running'
-  with_items: "{{ existing_linode_vms.results }}"
+    line: "127.0.0.1 {{ hostvars[item].linode_name }}.{{ linode_zone }} {{ hostvars[item].linode_name }} localhost"
+  when: hostvars[item].status == 1
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['linode'] }}"
 
 - name: Build hosts file on each host, to include each of the *other* hosts.
   lineinfile:
     dest: /etc/hosts
     regexp: ".*{{ hostvars[item[1]].linode_name }}$"
-    line: "{{ hostvars[item[1]].public_ip }} {{ hostvars[item][1].linode_name }}.{{ linode_zone }} {{ hostvars[item[1]].linode_name }}"
+    line: "{{ hostvars[item[1]].public_ip }} {{ hostvars[item[1]].linode_name }}.{{ linode_zone }} {{ hostvars[item[1]].linode_name }}"
     state: present
-  delegate_to: "{{ hostvars[item[0].instance.name].ansible_host }}"
-  when: (item[0].instance.status == 'Running') and (item[1].instance.status == 'Running') and (item[0].instance.name != item[1].instance.name)
+  delegate_to: "{{ item[0] }}"
+  when: (hostvars[item[0]].status == 1) and (hostvars[item[1]].status == 1) and (item[0] != item[1])
   with_nested:
-  - "{{ existing_linode_vms.results }}"
-  - "{{ existing_linode_vms.results }}"
+  - "{{ groups['linode'] }}"
+  - "{{ groups['linode'] }}"
 
