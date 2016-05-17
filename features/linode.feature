@@ -22,19 +22,19 @@ Feature: Deploy and manage servers on Linode
       And I run "ansible-playbook features/files/hosts/localhost.yml -e'confirm=y' --check"
      Then I should get:
        """
-       TASK [ergonlogic.cloud : Include 'get_distros' tasks] **************************
+       TASK [ergonlogic.cloud : Include 'get_distros' tasks.] *************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include 'inventory' tasks] ****************************
+       TASK [ergonlogic.cloud : Include 'inventory' tasks.] ***************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Check environment for LINODE_STATE] *******************
+       TASK [ergonlogic.cloud : Check environment for LINODE_STATE.] ******************
        ok: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to create missing Linode VMs] ***********
+       TASK [ergonlogic.cloud : Include tasks to create missing Linode VMs.] **********
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of Linode VMs] ***
+       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of Linode VMs.] ***
        skipping: [localhost]
        """
 
@@ -49,19 +49,19 @@ Feature: Deploy and manage servers on Linode
       And I run "LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -e'confirm=y' --check"
      Then I should get:
        """
-       TASK [ergonlogic.cloud : Include 'get_distros' tasks] **************************
+       TASK [ergonlogic.cloud : Include 'get_distros' tasks.] *************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include 'inventory' tasks] ****************************
+       TASK [ergonlogic.cloud : Include 'inventory' tasks.] ***************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Check environment for LINODE_STATE] *******************
+       TASK [ergonlogic.cloud : Check environment for LINODE_STATE.] ******************
        ok: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to create missing Linode VMs] ***********
+       TASK [ergonlogic.cloud : Include tasks to create missing Linode VMs.] **********
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of Linode VMs] ***
+       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of Linode VMs.] ***
        skipping: [localhost]
        """
 
