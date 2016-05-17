@@ -1,30 +1,31 @@
 ---
 
-- name: Include 'get_distros' tasks
+- name: Include 'get_distros' tasks.
   include: linode/get_distros.yml
   when: op == 'get_distros'
 
-- name: Include 'inventory' tasks
+- name: Include 'inventory' tasks.
   include: linode/inventory.yml
   when: groups['linode'] is defined
 
-- name: Check environment for LINODE_STATE
+- name: Check environment for LINODE_STATE.
   set_fact:
     linode_state: "{{ lookup('env','LINODE_STATE') | default(linode_state, True) }}"
 
-- name: Include tasks to create missing Linode VMs
+- name: Include tasks to create missing Linode VMs.
   include: linode/create.yml
   when: (op == 'linode') and (cloud.linode is defined)
 
-- name: Include tasks to ensure the proper state and group of Linode VMs
+- name: Include tasks to ensure the proper state and group of Linode VMs.
   include: linode/ensure.yml
   when: (op == 'linode') and (cloud.linode is defined) and (cached_linode_vms != {})
 
-- name: Include tasks to set hostnames of Linode VMs
+
+- name: Include tasks to set hostnames of Linode VMs.
   include: linode/hostnames.yml
   when: linode_set_hostnames and (cloud.linode is defined) and (linode_zone is defined)
 
-- name: Include tasks to add hostname DNS entries for Linode VMs
+- name: Include tasks to add hostname DNS entries for Linode VMs.
   include: linode/domains.yml
   when: linode_manage_hostname_dns_records and (cloud.linode is defined) and (linode_zone is defined)
 

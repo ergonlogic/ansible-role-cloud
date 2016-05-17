@@ -9,8 +9,8 @@
 - name: Set or update hostname.
   hostname:
     name: "{{ hostvars[item].linode_name }}"
-  when: hostvars[item].status == 1
   delegate_to: "{{ item }}"
+  when: hostvars[item].status|int() == 1
   with_items: "{{ groups['linode'] }}"
 
 - name: Update /etc/hostname.
@@ -20,7 +20,7 @@
     owner: root
     group: root
     mode: 0644
-  when: hostvars[item].status == 1
+  when: hostvars[item].status|int() == 1
   delegate_to: "{{ item }}"
   with_items: "{{ groups['linode'] }}"
 
@@ -29,7 +29,7 @@
     dest: /etc/hosts
     regexp: "^127.0.0.1"
     line: "127.0.0.1 {{ hostvars[item].linode_name }}.{{ linode_zone }} {{ hostvars[item].linode_name }} localhost"
-  when: hostvars[item].status == 1
+  when: hostvars[item].status|int() == 1
   delegate_to: "{{ item }}"
   with_items: "{{ groups['linode'] }}"
 
@@ -40,7 +40,7 @@
     line: "{{ hostvars[item[1]].public_ip }} {{ hostvars[item[1]].linode_name }}.{{ linode_zone }} {{ hostvars[item[1]].linode_name }}"
     state: present
   delegate_to: "{{ item[0] }}"
-  when: (hostvars[item[0]].status == 1) and (hostvars[item[1]].status == 1) and (item[0] != item[1])
+  when: (hostvars[item[0]].status|int() == 1) and (hostvars[item[1]].status|int() == 1) and (item[0] != item[1])
   with_nested:
   - "{{ groups['linode'] }}"
   - "{{ groups['linode'] }}"

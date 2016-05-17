@@ -10,6 +10,13 @@
   when: cached_linode_vms[item.key] is defined
   with_dict: "{{ cloud.linode }}"
 
+- name: Set '0' status on removed Linode VMs in inventory
+  add_host:
+    hostname: "{{ item.instance.name }}"
+    status: "0"
+  when: item.changed and item.instance.status == 'Deleting'
+  with_items: "{{ existing_linode_vms.results }}"
+
 - name: Look up Linode API key from environment.
   set_fact:
     linode_api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"

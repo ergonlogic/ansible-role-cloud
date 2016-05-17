@@ -1,6 +1,6 @@
 ---
 
-- name: Find public key to use for later server configuration.
+- name: Find user's public key to allow root SSH login.
   set_fact:
     ssh_pub_key: "{{ lookup('file', item) }}"
   with_first_found:
@@ -33,6 +33,9 @@
     hostname: "{{ item.instance.name }}"
     groups: "all,cloud,linode,{{ item.item.value.group|default('all') }}"
     ansible_host: "{{ item.instance.ipv4 }}"
+    ansible_ssh_host: "{{ item.instance.ipv4 }}"
+    public_ip: "{{ item.instance.ipv4 }}"
     linode_name: "{{ item.item.key }}"
+    status: "{{ item.instance.status | regex_replace('^Running$', '1') }}"
   when: item.changed
   with_items: "{{ new_linode_vms.results }}"
