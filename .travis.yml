@@ -7,7 +7,6 @@ addons:
   apt:
     packages:
     - python-yaml
-    - python-jinja2
 env:
   matrix:
   - TEST_TARGET="linode-test"
@@ -17,7 +16,7 @@ env:
 before_script:
 - export PATH=$HOME/.local/bin:$PATH
 - pip install --upgrade pip
-- pip install --user chube
+- pip install --user chube jinja2
 - make behat
 script:
 - ". d"
