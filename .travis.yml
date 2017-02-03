@@ -16,6 +16,7 @@ env:
   - secure: mWik2wEVcU5LumsjhmXPAN5bN5OQsgqx0kNZiLorMlF8a7NaL95jc4CKpQF1swRYr8PhU+p8zWCKwEg/bTqn8Qp/+AYKkeQzulCc6j7xDFGZvCsgXDvfm4ItuMEw47N2JmOJfKWlBP2FznDkCYB+evS279SmHu3cwOEqFn3PExuU3OSvG34VGm78psF/Xpu2u079MXYsXD1mvxpw1aFOUjlkKb+hrT7N/2z8W4ea2N49BRcdDbV7YuPBf0EYuQAhT+iQIg4Se/FRGqv2DqrwN135Z2Q/BwgU9Sp2UE4OsyDVjCNeTI66SuZtMnN3tBmyJfnpnNSRZCf+nRq7oZRP4Zr0+W1J0PR4Mg2VVOnzjw/r89ur6UawBbX+WLhymlwGgpK6SEOyzPw5Ve5Ac09OqLJz7URZHcq4njUqjm8KXaTedAAUD9MDHZYcjyffpOA26Fa0Vq5idg/x3pBehzNCb9/un+ACNlLOf6vJBaNZgtPKDZQR7hyJDYNus318Cu9q8Qz4D4+J9EXl1GApa7HKZG8V4oSTP4rl5iYoLzDAPkomMvAK1/Dcc6NcHNRpKUy8kxJYa38pB17U5pxqk2oVvY50SX9HkX+VEWW0t4H1XBYzfzrsBLQDCPAqB1CB4WolSq7Qf8yN8EOblW6oNc9bcYvcgpq1lk/DJIXLhjAnxaA=
 before_script:
 - export PATH=$HOME/.local/bin:$PATH
+- pip install --upgrade pip
 - pip install --user `whoami` chube
 - make behat
 script:
