@@ -15,8 +15,7 @@ help-linode:
 	@echo "  Destroy all defined Linode servers."
 
 features/files/roles/ergonlogic.cloud:
-	cd features/files/roles && \
-    ln -s ../../.. ergonlogic.cloud
+	cd features/files/roles && ln -s ../../.. ergonlogic.cloud
 
 linode-test: features/files/roles/ergonlogic.cloud
 	behat --tags="~wip&&~disabled$(BEHAT_TAGS_REAL)"
@@ -26,9 +25,9 @@ linode-test-wip: features/files/roles/ergonlogic.cloud
 	#behat --tags="wip&&~disabled$(BEHAT_TAGS_REAL)"
 
 linode-test-slow: features/files/roles/ergonlogic.cloud
-	ansible-playbook features/files/hosts/test0.yml -e 'confirm=y' -e 'op=linode'
-	ansible-playbook features/files/hosts/test1.yml -e 'confirm=y' -e 'op=linode'
-	ansible-playbook features/files/hosts/test2.yml -e 'confirm=y' -e 'op=linode'
+	ansible-playbook features/files/hosts/linode/test0.yml -e 'confirm=y' -e 'op=linode'
+	ansible-playbook features/files/hosts/linode/test1.yml -e 'confirm=y' -e 'op=linode'
+	ansible-playbook features/files/hosts/linode/test2.yml -e 'confirm=y' -e 'op=linode'
 	rm features/files/roles/ergonlogic.cloud
 
 linode-distros: ansible

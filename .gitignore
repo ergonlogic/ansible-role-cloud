@@ -1,3 +1,6 @@
 *.pyc
 *.retry
 meta/.galaxy_install_info
+linode.api.key
+aws.access.key
+aws.access.secret

@@ -1,13 +1,35 @@
 CLOUD
 =====
 
+
+[![Build Status](https://travis-ci.org/ergonlogic/ansible-role-cloud.svg?branch=master)](https://travis-ci.org/ergonlogic/ansible-role-cloud)
+
 Create and manage virtual machines easily, via a simple manifest. Currently supports Linode. AWS support coming soon.
 
+Background
+----------
+
+Ansible core includes powerful modules and inventory scripts that make working with cloud providers relatively easy. However, a number of these modules don't handle idempotency gracefully. That is, if one defines (for example) an EC2 instance task, and run Ansible, it will create a VM. If Ansible is run again, without entering the newly created VMs identifier, a second VM will be created.
+
+This module seeks to improve on that stuation by building a dynamic inventory, and mapping human-readable names to machine-readable resource IDs. By wrapping around Ansible's native cloud modules, we can work with a consistent, idempotent, cross-provider framework for managing cloud infrastructure. Better yet, it simplifies such usage by setting reasonable (configurable) defaults, and allowing the use of human-readable names across resources.
 
 Requirements
 ------------
 
-None. [Drumkit](http://github.com/ergonlogic/drumkit) is recommended.
+[Drumkit](http://drumk.it) is recommended, and included as a git submodule. If you did not use the `--recursive` option when cloning this repository, you can install Drumkit by running the following:
+
+    git submodule update --init
+
+Cloud providers require various forms of security tokens to ensure only authorized users can access their APIs. To use this role's cloud provisioning functionality, you can create the following files to contain your tokens:
+
+* `linode.api.key`
+* `aws.access.key`
+* `aws.access.secret`
+
+These files are ignored by Git, so as not to be committed into your infrastructure repo by mistake.
+
+When you bootstrap Drumkit (by running `. d`) the values contained in those files will be assigned to the necessary environmental variables (i.e., `LINODE_API_KEY`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`) to allow Ansible to connect to your cloud provider accounts.
+
 
 Role Variables
 --------------
