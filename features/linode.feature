@@ -1,3 +1,4 @@
+@linode
 Feature: Deploy and manage servers on Linode
   In order to automate infrastructure deployment
   As a DevOps engineer
@@ -17,9 +18,9 @@ Feature: Deploy and manage servers on Linode
      Then I should get:
        """
        inventory/linode.py --refresh-cache > /dev/null
-       ansible-playbook features/files/hosts/localhost.yml -e "confirm=y"
+       ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py -e "confirm=y"
        """
-      And I run "ansible-playbook features/files/hosts/localhost.yml -e'confirm=y' --check"
+      And I run "ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py -e'confirm=y' --check"
      Then I should get:
        """
        TASK [ergonlogic.cloud : Include 'get_distros' tasks.] *************************
@@ -43,10 +44,10 @@ Feature: Deploy and manage servers on Linode
      Then I should get:
        """
        inventory/linode.py --refresh-cache > /dev/null
-       LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -e "confirm=y"
+       LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py -e "confirm=y"
        """
       And I run "inventory/linode.py --refresh-cache > /dev/null"
-      And I run "LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -e'confirm=y' --check"
+      And I run "LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py -e'confirm=y' --check"
      Then I should get:
        """
        TASK [ergonlogic.cloud : Include 'get_distros' tasks.] *************************

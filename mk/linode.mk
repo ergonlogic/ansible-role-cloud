@@ -15,16 +15,16 @@ help-linode:
 	@echo "  Destroy all defined Linode servers."
 
 linode-test: features/files/roles/ergonlogic.cloud
-	behat --tags="~wip&&~disabled$(BEHAT_TAGS_REAL)"
+	behat --tags="@linode&&~wip&&~disabled$(BEHAT_TAGS_REAL)"
 	rm features/files/roles/ergonlogic.cloud
 
 linode-test-wip: features/files/roles/ergonlogic.cloud
-	#behat --tags="wip&&~disabled$(BEHAT_TAGS_REAL)"
+	#behat --tags="@linode&&wip&&~disabled$(BEHAT_TAGS_REAL)"
 
 linode-test-slow: features/files/roles/ergonlogic.cloud
-	ansible-playbook features/files/hosts/linode/test0.yml -e 'confirm=y' -e 'op=linode'
-	ansible-playbook features/files/hosts/linode/test1.yml -e 'confirm=y' -e 'op=linode'
-	ansible-playbook features/files/hosts/linode/test2.yml -e 'confirm=y' -e 'op=linode'
+	ansible-playbook features/files/hosts/linode/test0.yml -i $(LINODE_INVENTORY) -e 'confirm=y' -e 'op=linode'
+	ansible-playbook features/files/hosts/linode/test1.yml -i $(LINODE_INVENTORY) -e 'confirm=y' -e 'op=linode'
+	ansible-playbook features/files/hosts/linode/test2.yml -i $(LINODE_INVENTORY) -e 'confirm=y' -e 'op=linode'
 	rm features/files/roles/ergonlogic.cloud
 
 linode-distros: ansible
@@ -37,15 +37,15 @@ linode-inventory-quiet:
 	$(LINODE_INVENTORY) --refresh-cache > /dev/null
 
 linode: ansible linode-inventory-quiet
-	ansible-playbook $(CLOUD_PLAYBOOK)
+	ansible-playbook -i inventory/linode.py $(CLOUD_PLAYBOOK)
 
 linode-force: ansible linode-inventory-quiet
-	ansible-playbook $(CLOUD_PLAYBOOK) -e "confirm=y"
+	ansible-playbook $(CLOUD_PLAYBOOK) -i $(LINODE_INVENTORY) -e "confirm=y"
 
 linode-destroy: ansible linode-inventory-quiet
-	LINODE_STATE=absent ansible-playbook $(CLOUD_PLAYBOOK)
+	LINODE_STATE=absent ansible-playbook -i $(LINODE_INVENTORY) $(CLOUD_PLAYBOOK)
 
 linode-destroy-force: ansible linode-inventory-quiet
-	LINODE_STATE=absent ansible-playbook $(CLOUD_PLAYBOOK) -e "confirm=y"
+	LINODE_STATE=absent ansible-playbook -i $(LINODE_INVENTORY) $(CLOUD_PLAYBOOK) -e "confirm=y"
 
 # vi:syntax=makefile
