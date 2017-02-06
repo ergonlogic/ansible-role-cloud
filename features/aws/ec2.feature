@@ -9,7 +9,7 @@ Feature: Deploy and manage EC2 VMs on AWS
      Then I should get:
        """
        inventory/ec2.py --refresh-cache > /dev/null
-       ansible-playbook features/files/hosts/localhost.yml -e "confirm=y"
+       ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e "confirm=y"
        """
       And I run "ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e'confirm=y' --check"
      Then I should get:
@@ -32,7 +32,7 @@ Feature: Deploy and manage EC2 VMs on AWS
      Then I should get:
        """
        inventory/ec2.py --refresh-cache > /dev/null
-       AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -e "confirm=y"
+       AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e "confirm=y"
        """
       And I run "inventory/ec2.py --refresh-cache > /dev/null"
       And I run "AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e'confirm=y' --check"

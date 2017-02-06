@@ -8,7 +8,7 @@ Feature: Deploy and manage servers on Linode
      When I run "make linode-distros"
      Then I should get:
        """
-       ansible-playbook features/files/hosts/localhost.yml -e "op=get_distros"
+       ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py -e "op=get_distros"
        124: Ubuntu 14.04 LTS
        140: Debian 8
        """
