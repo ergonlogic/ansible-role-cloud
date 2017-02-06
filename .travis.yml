@@ -20,7 +20,7 @@ env:
 before_script:
 - export PATH=$HOME/.local/bin:$PATH
 - pip install --upgrade pip
-- pip install --user chube boto jinja2
+- pip install --user chube boto jinja2 httplib2
 - make behat
 script:
 - ". d"
