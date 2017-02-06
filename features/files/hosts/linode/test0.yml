@@ -16,7 +16,7 @@
   #### Create 2 test Linode VMs, as listed in the 'cloud' manifest above.  ####
 
   - name: Check inventory.
-    shell: inventory/linode.py --refresh-cache
+    shell: ../../../../inventory/linode.py --refresh-cache
     changed_when: False
     register: linode_ansible_inventory
 

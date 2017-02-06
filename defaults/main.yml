@@ -1,9 +1,9 @@
 ---
 
 cloud: []
-op: 'linode'
+
+linode_state: 'present'
 linode_set_hostnames: True
 linode_manage_hostname_dns_records: True
-linode_state: 'present'
 
 aws_ec2_state: 'present'

@@ -17,7 +17,7 @@
   #### Remove one of the test Linode VMs, by redifining the 'cloud' manifest.  ####
 
   - name: Check inventory.
-    shell: inventory/linode.py --refresh-cache
+    shell: ../../../../inventory/linode.py --refresh-cache
     changed_when: False
     register: linode_ansible_inventory
 

@@ -1,6 +1,10 @@
 ---
 - name: Include Linode functionality
   include: linode.yml
+  static: false
+  when: cloud.linode is defined
 
 - name: Include AWS functionality
   include: aws.yml
+  static: false
+  when: cloud.aws is defined
