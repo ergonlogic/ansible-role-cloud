@@ -28,7 +28,7 @@ linode-test-slow: features/files/roles/ergonlogic.cloud
 	rm features/files/roles/ergonlogic.cloud
 
 linode-distros: ansible
-	ansible-playbook $(CLOUD_PLAYBOOK) -e "op=get_distros"
+	ansible-playbook $(CLOUD_PLAYBOOK) -i $(LINODE_INVENTORY) -e "op=get_distros"
 
 linode-inventory:
 	$(LINODE_INVENTORY) --refresh-cache
@@ -43,9 +43,9 @@ linode-force: ansible linode-inventory-quiet
 	ansible-playbook $(CLOUD_PLAYBOOK) -i $(LINODE_INVENTORY) -e "confirm=y"
 
 linode-destroy: ansible linode-inventory-quiet
-	LINODE_STATE=absent ansible-playbook -i $(LINODE_INVENTORY) $(CLOUD_PLAYBOOK)
+	LINODE_STATE=absent ansible-playbook $(CLOUD_PLAYBOOK) -i $(LINODE_INVENTORY)
 
 linode-destroy-force: ansible linode-inventory-quiet
-	LINODE_STATE=absent ansible-playbook -i $(LINODE_INVENTORY) $(CLOUD_PLAYBOOK) -e "confirm=y"
+	LINODE_STATE=absent ansible-playbook $(CLOUD_PLAYBOOK) -i $(LINODE_INVENTORY) -e "confirm=y"
 
 # vi:syntax=makefile
