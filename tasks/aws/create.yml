@@ -1,0 +1,41 @@
+---
+
+- name: Find user's public key to allow root SSH login.
+  set_fact:
+    ssh_pub_key: "{{ lookup('file', item) }}"
+  with_first_found:
+  - files:
+    - '~/.ssh/id_rsa.pub'
+    skip: true
+
+- name: Create missing EC2 VMs
+  # ref.: http://docs.ansible.com/ansible/ec2_module.html
+  ec2:
+    name: "{{ item.key }}"
+    instance_type: "{{ item.value.instance_type | default(cloud_ec2_default_instance_type) }}" #fix default
+    region: "{{ item.value.region | default(cloud_ec2_default_region)  }}"  # fix default
+    image: "{{ item.value.image | default(cloud_ec2_default_image) }}" # fix default
+    ssh_pub_key: "{{ ssh_pub_key | default(omit) }}"
+    wait: yes
+    state: "{{ item.value.state | default(cloud_ec2_default_state) }}"
+  when: (item.value.state|default(cloud_ec2_default_state) != 'absent') and (cached_ec2_vms[item.key] is not defined)
+  with_dict: "{{ cloud.ec2 }}"
+  register: new_ec2_vms
+
+- name: Add newly created EC2 VMs to cached inventory
+  set_fact:
+    cached_linode_vms: "{{ cached_ec2_vms | combine( { item.item.key : item.instance.id } ) }}"
+  when: cached_ec2_vms[item.item.key] is not defined and item.changed
+  with_items: "{{ new_ec2_vms.results }}"
+
+- name: Add newly created EC2 VMs to groups/inventory
+  add_host:
+    hostname: "{{ item.instance.name }}"
+    groups: "all,cloud,ec2,{{ item.item.value.group|default('all') }}"
+    ansible_host: "{{ item.instance.ipv4 }}"
+    ansible_ssh_host: "{{ item.instance.ipv4 }}"
+    public_ip: "{{ item.instance.ipv4 }}"
+    linode_name: "{{ item.item.key }}"
+    status: "{{ item.instance.status | regex_replace('^Running$', '1') }}"
+  when: item.changed
+  with_items: "{{ new_ec2_vms.results }}"

@@ -14,9 +14,6 @@ help-linode:
 	@echo "make linode-destroy"
 	@echo "  Destroy all defined Linode servers."
 
-features/files/roles/ergonlogic.cloud:
-	cd features/files/roles && ln -s ../../.. ergonlogic.cloud
-
 linode-test: features/files/roles/ergonlogic.cloud
 	behat --tags="~wip&&~disabled$(BEHAT_TAGS_REAL)"
 	rm features/files/roles/ergonlogic.cloud

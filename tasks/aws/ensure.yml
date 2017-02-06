@@ -1,0 +1,32 @@
+---
+- name: Ensure the state of existing Linode VMs
+  # ref.: http://docs.ansible.com/ansible/linode_module.html
+  linode:
+    name: "{{ item.key }}"
+    linode_id: "{{ cached_linode_vms[item.key] | default(omit) }}"
+    wait: yes
+    state: "{{ item.value.state | default(linode_state) }}"
+  register: existing_linode_vms
+  when: cached_linode_vms[item.key] is defined
+  with_dict: "{{ cloud.linode }}"
+
+- name: Set '0' status on removed Linode VMs in inventory
+  add_host:
+    hostname: "{{ item.instance.name }}"
+    status: "0"
+  when: item.changed and item.instance.status == 'Deleting'
+  with_items: "{{ existing_linode_vms.results }}"
+
+- name: Look up Linode API key from environment.
+  set_fact:
+    linode_api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
+  when: linode_api_key is not defined
+
+- name: Ensure that the proper group is assigned to Linode VMs
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=linode.update&LinodeID={{ item.instance.id }}&lpm_displayGroup={{ item.item.value.group }}"
+  when: (item.instance.status == 'Running') and (item.item.value.group is defined)
+  with_items: "{{ existing_linode_vms.results }}"
+  register: groups_api_result
+  failed_when: groups_api_result.json.ERRORARRAY != []
+

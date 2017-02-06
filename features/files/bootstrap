@@ -16,5 +16,15 @@ else
   else
     echo "No 'linode.api.key' file found. LINODE_API_KEY must be set by another method." 1>&2
   fi
+  if [[ -f aws.access.key ]]; then
+    export AWS_ACCESS_KEY_ID=$(cat aws.access.key)
+  else
+    echo "No 'aws.access.key' file found. AWS_ACCESS_KEY_ID must be set by another method." 1>&2
+  fi
+  if [[ -f aws.access.secret ]]; then
+    export AWS_SECRET_ACCESS_KEY=$(cat aws.access.secret)
+  else
+    echo "No 'aws.access.secret' file found. AWS_SECRET_ACCESS_KEY must be set by another method." 1>&2
+  fi
 fi
 

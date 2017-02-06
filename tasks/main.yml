@@ -1,3 +1,6 @@
 ---
 - name: Include Linode functionality
   include: linode.yml
+
+- name: Include AWS functionality
+  include: aws.yml
