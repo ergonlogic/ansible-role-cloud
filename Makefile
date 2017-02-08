@@ -1,6 +1,8 @@
 CLOUD_PLAYBOOK   ?= features/files/hosts/localhost.yml
 LINODE_INVENTORY ?= inventory/linode.py
 
+ansible_RELEASE   = v2.2.1.0-1
+
 cloud-init:
 	pip install --user boto
 
