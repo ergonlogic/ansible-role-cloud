@@ -6,4 +6,8 @@ linode_state: 'present'
 linode_set_hostnames: True
 linode_manage_hostname_dns_records: True
 
-aws_ec2_state: 'present'
+ec2_state: 'present'
+ec2_image: 'ami-b14ba7a7'
+ec2_instance_type: 't2.micro'
+ec2_region: 'us-east-1'
+cached_ec2_vms: {}

@@ -5,8 +5,9 @@
   vars:
   - cloud:
       aws:
-        test1: {}
-        test2: {}
+        ec2:
+          test1: {}
+          test2: {}
 
   roles:
   - ergonlogic.cloud
@@ -16,7 +17,7 @@
   #### Create 2 test EC2 VMs, as listed in the 'cloud' manifest above.  ####
 
   - name: Check inventory.
-    shell: inventory/ec2.py --refresh-cache
+    shell: ../../../../../inventory/ec2.py --refresh-cache
     changed_when: False
     register: ec2_ansible_inventory
 

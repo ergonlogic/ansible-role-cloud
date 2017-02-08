@@ -5,9 +5,10 @@
   vars:
   - cloud:
       aws:
-        test1: {}
-        test2:
-          state: absent
+        ec2:
+          test1: {}
+          test2:
+            state: absent
 
   roles:
   - ergonlogic.cloud
@@ -17,7 +18,7 @@
   #### Remove one of the test EC2 VMs, by redifining the 'cloud' manifest.  ####
 
   - name: Check inventory.
-    shell: inventory/ec2.py --refresh-cache
+    shell: ../../../../../inventory/ec2.py --refresh-cache
     changed_when: False
     register: ec2_ansible_inventory
 

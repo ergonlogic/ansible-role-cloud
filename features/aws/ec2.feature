@@ -11,20 +11,17 @@ Feature: Deploy and manage EC2 VMs on AWS
        inventory/ec2.py --refresh-cache > /dev/null
        ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e "confirm=y"
        """
-      And I run "ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e'confirm=y' --check"
+      And I run "ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e 'op=ec2' -e'confirm=y' --check"
      Then I should get:
        """
-       TASK [ergonlogic.cloud : Include 'inventory' tasks.] ***
+       TASK [ergonlogic.cloud : Include Linode functionality] *************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Check environment for AWS_EC2_STATE.] ***
-       ok: [localhost]
-
-       TASK [ergonlogic.cloud : Include tasks to create missing EC2 VMs.] ***
+       TASK [ergonlogic.cloud : Include AWS functionality] ****************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of EC2 VMs.] ***
-       skipping: [localhost]
+       PLAY RECAP *********************************************************************
+       localhost                  : ok=0    changed=0    unreachable=0    failed=0
        """
 
   Scenario: Call a command to destroy all defined EC2 VMs.
@@ -35,19 +32,16 @@ Feature: Deploy and manage EC2 VMs on AWS
        AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e "confirm=y"
        """
       And I run "inventory/ec2.py --refresh-cache > /dev/null"
-      And I run "AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e'confirm=y' --check"
+      And I run "AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py -e'confirm=y' -e'op=ec2' --check"
      Then I should get:
        """
-       TASK [ergonlogic.cloud : Include 'inventory' tasks.] ***
+       TASK [ergonlogic.cloud : Include Linode functionality] *************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Check environment for AWS_EC2_STATE.] ***
-       ok: [localhost]
-
-       TASK [ergonlogic.cloud : Include tasks to create missing EC2 VMs.] ***
+       TASK [ergonlogic.cloud : Include AWS functionality] ****************************
        skipping: [localhost]
 
-       TASK [ergonlogic.cloud : Include tasks to ensure the proper state and group of EC2 VMs.] ***
-       skipping: [localhost]
+       PLAY RECAP *********************************************************************
+       localhost                  : ok=0    changed=0    unreachable=0    failed=0
        """
 

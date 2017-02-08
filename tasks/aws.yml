@@ -1,27 +1,7 @@
 ---
 
-- name: Include 'inventory' tasks.
-  include: aws/inventory.yml
-  when: groups['aws'] is defined
-
-- name: Check environment for AWS_EC2_STATE.
-  set_fact:
-    linode_state: "{{ lookup('env','AWS_EC2_STATE') | default(aws_ec2_state, True) }}"
-
-- name: Include tasks to create missing EC2 VMs.
-  include: aws/create.yml
-  when: (op == 'aws') and (cloud.aws is defined)
-
-- name: Include tasks to ensure the proper state and group of EC2 VMs.
-  include: aws/ensure.yml
-  when: (op == 'aws') and (cloud.aws is defined) and (cached_aws_vms != {})
-
-
-- name: Include tasks to set hostnames of EC2 VMs.
-  include: aws/hostnames.yml
-  when: aws_set_hostnames and (cloud.aws is defined) and (aws_zone is defined)
-
-- name: Include tasks to add hostname DNS entries for EC2 VMs.
-  include: aws/domains.yml
-  when: aws_manage_hostname_dns_records and (cloud.aws is defined) and (aws_zone is defined)
+- name: Include EC2 tasks.
+  include: aws/ec2.yml
+  static: false
+  when: cloud.aws.ec2 is defined
 

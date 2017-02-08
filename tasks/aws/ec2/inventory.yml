@@ -1,0 +1,7 @@
+---
+
+- name: Map EC2 VMs inventory by name (for idempotence)
+  set_fact:
+    cached_ec2_vms: "{{ cached_ec2_vms | combine( {hostvars[item].ec2_tag_Name: hostvars[item].ec2_id} ) }}"
+  with_items: "{{ groups['ec2'] }}"
+

@@ -1,7 +1,0 @@
----
-
-- name: Map Linode VMs inventory by name (for idempotence)
-  set_fact:
-    cached_linode_vms: "{{ cached_linode_vms | combine( {hostvars[item].linode_name: hostvars[item].api_id} ) }}"
-  with_items: "{{ groups['linode'] }}"
-

@@ -3,11 +3,12 @@
   connection: local
 
   vars:
-  - aws_ec2_state: absent
+  - ec2_state: absent
   - cloud:
       aws:
-        test1: {}
-        test2: {}
+        ec2:
+          test1: {}
+          test2: {}
 
   roles:
   - ergonlogic.cloud
@@ -17,7 +18,7 @@
   #### Remove the last test EC2 VM, by setting the default state to 'absent'.  ####
 
   - name: Check inventory.
-    shell: inventory/ec2.py --refresh-cache
+    shell: ../../../../../inventory/ec2.py --refresh-cache
     changed_when: False
     register: ec2_ansible_inventory
 
