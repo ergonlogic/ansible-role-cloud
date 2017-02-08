@@ -14,8 +14,6 @@ Feature: Deploy and manage servers on Linode
       And I run "ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py --check"
      Then I should get:
        """
-       PLAY [localhost] ***************************************************************
-
        TASK [ergonlogic.cloud : Include Linode functionality] *************************
        skipping: [localhost]
 
@@ -37,8 +35,6 @@ Feature: Deploy and manage servers on Linode
       And I run "LINODE_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/linode.py --check"
      Then I should get:
        """
-       PLAY [localhost] ***************************************************************
-
        TASK [ergonlogic.cloud : Include Linode functionality] *************************
        skipping: [localhost]
 
