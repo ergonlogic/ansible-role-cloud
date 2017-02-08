@@ -29,7 +29,7 @@ Feature: Deploy and manage EC2 VMs on AWS
      Then I should get:
        """
        inventory/ec2.py --refresh-cache > /dev/null
-       AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py"
+       AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py
        """
       And I run "inventory/ec2.py --refresh-cache > /dev/null"
       And I run "AWS_EC2_STATE=absent ansible-playbook features/files/hosts/localhost.yml -i inventory/ec2.py --check"
