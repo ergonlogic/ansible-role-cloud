@@ -1,0 +1,75 @@
+---
+
+- name: Look up Linode API key from environment.
+  set_fact:
+    linode_api_key: "{{ lookup('env', 'LINODE_API_KEY') }}"
+  when: linode_api_key is not defined
+
+- name: Retrieve list of domains (zones) from Linode API.
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=domain.list"
+    return_content: yes
+  become: False
+  register: linode_zone_list
+
+- name: Search list of domains (zones) for our domain's ID.
+  set_fact:
+    linode_domain_id: "{{ item.DOMAINID }}"
+  when: (linode_domain_id is not defined) and (linode_zone is defined) and (item.DOMAIN == linode_zone)
+  with_items: "{{ linode_zone_list.json.DATA }}"
+
+- name: Create zone (domain) if it doesn't exist already
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=domain.create&Domain={{ linode_zone }}&Type=master&SOA_Email={{ linode_zone_soa_email }}"
+    return_content: yes
+  register: linode_create_zone
+  failed_when: linode_create_zone.json.ERRORARRAY != []
+  when: (linode_domain_id is not defined) and (linode_zone is defined)
+
+- name: Use newly created domain's ID.
+  set_fact:
+    linode_domain_id: "{{ linode_create_zone.json.DATA.DomainID }}"
+  when: (linode_domain_id is not defined) and (linode_zone is defined) and (linode_create_zone.json.DATA.DomainID is defined)
+
+- name: Retrieve list of DNS records from Linode API.
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=domain.resource.list&DomainID={{ linode_domain_id }}"
+    return_content: yes
+  become: False
+  register: linode_domain_records_list
+  when: linode_domain_id is defined
+
+- name: Update existing hostname DNS records for Linode VMs.
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=domain.resource.update&DomainID={{ linode_domain_id }}&Type=A&Name={{ item[0].item.key }}&Target={{ item[0].instance.ipv4 }}&ResourceID={{ item[1].RESOURCEID }}"
+  become: False
+  register: updated_linode_domain_records_list
+  failed_when: updated_linode_domain_records_list.json.ERRORARRAY != []
+  when: (item[0].instance.status == 'Running') and (item[0].item.key == item[1].NAME) and (item[1].TARGET != item[0].instance.ipv4)
+  with_nested:
+  - "{{ existing_linode_vms.results }}"
+  - "{{ linode_domain_records_list.json.DATA }}"
+
+- name: Build searchable list of hostname DNS records.
+  set_fact:
+    linode_domain_records: "{{ linode_domain_records | combine({item.NAME:item.RESOURCEID}) }}"
+  with_items: "{{ linode_domain_records_list.json.DATA }}"
+
+- name: Create missing hostname DNS records for Linode VMs.
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=domain.resource.create&DomainID={{ linode_domain_id }}&Type=A&Name={{ item.item.key }}&Target={{ item.instance.ipv4 }}"
+  become: False
+  register: created_linode_domain_records_list
+  failed_when: created_linode_domain_records_list.json.ERRORARRAY != []
+  when: (item.instance.status == 'Running') and not (linode_domain_records|join(' ')|search(item.item.key))
+  with_items: "{{ existing_linode_vms.results }}"
+
+- name: Delete hostname DNS records for destroyed Linode VMs.
+  uri:
+    url: "https://api.linode.com/?api_key={{ linode_api_key }}&api_action=domain.resource.delete&DomainID={{ linode_domain_id }}&ResourceID={{ linode_domain_records[item.key] }}"
+  become: False
+  register: deleted_linode_domain_records_list
+  failed_when: deleted_linode_domain_records_list.json.ERRORARRAY != []
+  when: (item.value.state|default(linode_state) == 'absent') and (linode_domain_records[item.key] is defined)
+  with_dict: "{{ cloud.linode }}"
+

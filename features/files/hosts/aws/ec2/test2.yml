@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+  - ec2_state: absent
+  - cloud:
+      aws:
+        ec2:
+          test1: {}
+          test2: {}
+
+  roles:
+  - ergonlogic.cloud
+
+  tasks:
+
+  #### Remove the last test EC2 VM, by setting the default state to 'absent'.  ####
+
+  - name: Check inventory.
+    shell: ../../../../../inventory/ec2.py --refresh-cache
+    changed_when: False
+    register: ec2_ansible_inventory
+
+  - name: Assert that neither 'test1' nor 'test2' appear in the inventory.
+    assert:
+      that:
+      - "'test1' not in ec2_ansible_inventory.stdout"
+      - "'test2' not in ec2_ansible_inventory.stdout"
+
+#  - name: Query Linode API.
+#    uri:
+#      url: "https://api.linode.com/?api_key={{ lookup('env', 'LINODE_API_KEY') }}&api_action=linode.list"
+#      return_content: yes
+#    register: linode_api_inventory
+#
+#  - name: Assert that neither 'test1' nor 'test2' appear in the API response.
+#    assert:
+#      that:
+#      - "'test1' not in linode_api_inventory.content"
+#      - "'test2' not in linode_api_inventory.content"
+#

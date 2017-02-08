@@ -1,0 +1,47 @@
+---
+
+# TODO: Find a way to skip this. This shouldn't be necessary after admin-users has run, and will fail for users other than the one who created the VM to begin with.
+- set_fact:
+    ansible_ssh_private_key_file: ~/.ssh/id_rsa
+- set_fact:
+    ansible_ssh_user: root
+
+- name: Set or update hostname.
+  hostname:
+    name: "{{ hostvars[item].linode_name }}"
+  delegate_to: "{{ item }}"
+  when: hostvars[item].status|int() == 1
+  with_items: "{{ groups['linode'] }}"
+
+- name: Update /etc/hostname.
+  copy:
+    content: "{{ hostvars[item].linode_name }}"
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: 0644
+  when: hostvars[item].status|int() == 1
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['linode'] }}"
+
+- name: Update /etc/hosts with localhost.
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "^127.0.0.1"
+    line: "127.0.0.1 {{ hostvars[item].linode_name }}.{{ linode_zone }} {{ hostvars[item].linode_name }} localhost"
+  when: hostvars[item].status|int() == 1
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['linode'] }}"
+
+- name: Build hosts file on each host, to include each of the *other* hosts.
+  lineinfile:
+    dest: /etc/hosts
+    regexp: ".*{{ hostvars[item[1]].linode_name }}$"
+    line: "{{ hostvars[item[1]].public_ip }} {{ hostvars[item[1]].linode_name }}.{{ linode_zone }} {{ hostvars[item[1]].linode_name }}"
+    state: present
+  delegate_to: "{{ item[0] }}"
+  when: (hostvars[item[0]].status|int() == 1) and (hostvars[item[1]].status|int() == 1) and (item[0] != item[1])
+  with_nested:
+  - "{{ groups['linode'] }}"
+  - "{{ groups['linode'] }}"
+

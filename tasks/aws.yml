@@ -1,0 +1,7 @@
+---
+
+- name: Include EC2 tasks.
+  include: aws/ec2.yml
+  static: false
+  when: cloud.aws.ec2 is defined
+

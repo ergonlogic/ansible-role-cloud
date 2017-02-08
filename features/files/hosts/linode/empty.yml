@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    linode: {}
+
+  roles:
+  - ergonlogic.cloud
