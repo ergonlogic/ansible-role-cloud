@@ -12,6 +12,7 @@ test-wip: linode-test-wip
 features/files/roles/ergonlogic.cloud:
 	cd features/files/roles && ln -s ../../.. ergonlogic.cloud
 
+include mk/common.mk
 include mk/linode.mk
 include mk/aws/ec2.mk
 include .mk/GNUmakefile

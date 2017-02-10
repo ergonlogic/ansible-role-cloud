@@ -21,7 +21,7 @@ linode-test: features/files/roles/ergonlogic.cloud
 linode-test-wip: features/files/roles/ergonlogic.cloud
 	#behat --tags="@linode&&wip&&~disabled$(BEHAT_TAGS_REAL)"
 
-linode-test-slow: features/files/roles/ergonlogic.cloud
+linode-test-slow: features/files/roles/ergonlogic.cloud generate-keypair
 	ansible-playbook features/files/hosts/linode/test0.yml -i $(LINODE_INVENTORY)
 	ansible-playbook features/files/hosts/linode/test1.yml -i $(LINODE_INVENTORY)
 	ansible-playbook features/files/hosts/linode/test2.yml -i $(LINODE_INVENTORY)

@@ -20,7 +20,7 @@ aws-ec2-test-wip: features/files/roles/ergonlogic.cloud behat
 	behat --tags="@aws&&@ec2&&wip&&~disabled$(BEHAT_TAGS_REAL)"
 	rm features/files/roles/ergonlogic.cloud
 
-aws-ec2-test-slow: features/files/roles/ergonlogic.cloud
+aws-ec2-test-slow: features/files/roles/ergonlogic.cloud generate-keypair
 	ansible-playbook features/files/hosts/aws/ec2/test0.yml -i $(AWS_EC2_INVENTORY)
 	ansible-playbook features/files/hosts/aws/ec2/test1.yml -i $(AWS_EC2_INVENTORY)
 	ansible-playbook features/files/hosts/aws/ec2/test2.yml -i $(AWS_EC2_INVENTORY)
