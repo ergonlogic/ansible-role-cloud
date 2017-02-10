@@ -6,7 +6,6 @@
   with_dict: "{{ cloud.aws.ec2 }}"
 
 - name: Ensure the state of existing EC2 VMs
-  # ref.: http://docs.ansible.com/ansible/ec2_module.html
   ec2:
     instance_tags:
       Name: "{{ item.key }}"
@@ -16,6 +15,7 @@
     instance_type: "{{ item.value.instance_type | default(ec2_instance_type) }}"
     region: "{{ item.value.region | default(ec2_region) }}"
     image: "{{ item.value.image | default(ec2_image) }}"
+    key_name: "{{ item.value.key_name | default(lookup('env','USER')) }}"
     wait: yes
   register: existing_ec2_vms
   when: cached_ec2_vms[item.key] is defined

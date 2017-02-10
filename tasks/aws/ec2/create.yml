@@ -2,14 +2,27 @@
 
 - include: '../../common/ssh_pub_key.yml'
 
+- name: Compile a list of unique regions where EC2 VMs will be provisioned
+  set_fact:
+    ec2_regions: "{{ (ec2_regions + [ item.value.region | default(ec2_region) ])|unique }}"
+  with_dict: "{{ cloud }}"
+
+- name: Create an EC2 keypair
+  ec2_key:
+    name: "{{ lookup('env','USER') }}" # the current user
+    key_material: "{{ ssh_pub_key }}"
+    region: "{{ item }}"
+    wait: yes
+  with_items: "{{ ec2_regions }}"
+
 - name: Create missing EC2 VMs
-  # ref.: http://docs.ansible.com/ansible/ec2_module.html
   ec2:
     instance_tags:
       Name: "{{ item.key }}"
     instance_type: "{{ item.value.instance_type | default(ec2_instance_type) }}"
-    region: "{{ item.value.region | default(ec2_region)  }}"
+    region: "{{ item.value.region | default(ec2_region) }}"
     image: "{{ item.value.image | default(ec2_image) }}"
+    key_name: "{{ item.value.key_name | default(lookup('env','USER')) }}"
     wait: yes
     state: "{{ item.value.state | default(ec2_state) }}"
   when: (item.value.state|default(ec2_state) != 'absent') and (cached_ec2_vms[item.key] is not defined)
