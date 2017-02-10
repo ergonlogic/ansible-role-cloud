@@ -1,0 +1,26 @@
+---
+
+- name: Check environment for AWS_EC2_KEYPAIR_STATE.
+  set_fact:
+    ec2_state: "{{ lookup('env','AWS_EC2_KEYPAIR_STATE') | default(ec2_keypair_state, True) }}"
+
+- include: '../../common/ssh_pub_key.yml'
+
+- name: Compile a list of unique regions where EC2 VMs will be provisioned
+  set_fact:
+    ec2_regions: "{{ (ec2_regions + [ item.value.region | default(ec2_region) ])|unique }}"
+  with_dict: "{{ cloud }}"
+
+- name: Specify the default EC2 key name.
+  set_fact:
+    ec2_key_name: "{{ lookup('env','USER') }}" # the current user
+
+- name: Create EC2 keypairs
+  ec2_key:
+    name: "{{ ec2_key_name }}"
+    key_material: "{{ ssh_pub_key }}"
+    region: "{{ item }}"
+    state: "{{ ec2_keypair_state }}"
+    wait: yes
+  with_items: "{{ ec2_regions }}"
+
