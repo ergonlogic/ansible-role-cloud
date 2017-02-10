@@ -12,6 +12,7 @@
     name: "{{ lookup('env','USER') }}" # the current user
     key_material: "{{ ssh_pub_key }}"
     region: "{{ item }}"
+    state: "{{ ec2_keypair_state }}"
     wait: yes
   with_items: "{{ ec2_regions }}"
 

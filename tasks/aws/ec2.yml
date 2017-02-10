@@ -9,6 +9,10 @@
   set_fact:
     ec2_state: "{{ lookup('env','AWS_EC2_STATE') | default(ec2_state, True) }}"
 
+- name: Check environment for AWS_EC2_KEYPAIR_STATE.
+  set_fact:
+    ec2_state: "{{ lookup('env','AWS_EC2_KEYPAIR_STATE') | default(ec2_keypair_state, True) }}"
+
 - name: Include tasks to create missing EC2 VMs.
   include: ec2/create.yml
 
