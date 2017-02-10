@@ -1,12 +1,6 @@
 ---
 
-- name: Find user's public key to allow root SSH login.
-  set_fact:
-    ssh_pub_key: "{{ lookup('file', item) }}"
-  with_first_found:
-  - files:
-    - '~/.ssh/id_rsa.pub'
-    skip: true
+- include: '../common/ssh_pub_key.yml'
 
 - name: Create missing Linode VMs
   # ref.: http://docs.ansible.com/ansible/linode_module.html

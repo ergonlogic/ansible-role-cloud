@@ -1,5 +1,7 @@
 ---
 
+- include: '../../common/ssh_pub_key.yml'
+
 - name: Create missing EC2 VMs
   # ref.: http://docs.ansible.com/ansible/ec2_module.html
   ec2:
