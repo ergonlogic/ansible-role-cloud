@@ -9,8 +9,16 @@
   set_fact:
     ec2_state: "{{ lookup('env','AWS_EC2_STATE') | default(ec2_state, True) }}"
 
+- name: Compile a list of unique regions where EC2 VMs will be provisioned
+  set_fact:
+    ec2_regions: "{{ (ec2_regions + [ item.value.region | default(ec2_region) ])|unique }}"
+  with_dict: "{{ cloud }}"
+
 - name: Include tasks to create missing EC2 keypairs.
   include: ec2/keypairs.yml
+
+- name: Include tasks to create missing EC2 security groups.
+  include: ec2/sec_groups.yml
 
 - name: Include tasks to create missing EC2 VMs.
   include: ec2/create.yml

@@ -15,6 +15,7 @@
     instance_type: "{{ item.value.instance_type | default(ec2_instance_type) }}"
     region: "{{ item.value.region | default(ec2_region) }}"
     image: "{{ item.value.image | default(ec2_image) }}"
+    groups: "{{ item.value.groups | default(ec2_groups) }}"
     key_name: "{{ item.value.key_name | default(lookup('env','USER')) }}"
     wait: yes
   register: existing_ec2_vms

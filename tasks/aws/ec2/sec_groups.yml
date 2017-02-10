@@ -1,0 +1,14 @@
+---
+
+- name: Create a security group that allows SSH access.
+  ec2_group:
+    name: 'ssh_global'
+    description: 'Allow SSH access from anywhere.'
+    region: "{{ item }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+    state: "{{ ec2_groups_state }}"
+  with_items: "{{ ec2_regions }}"

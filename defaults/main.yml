@@ -11,5 +11,8 @@ ec2_image: 'ami-b14ba7a7'
 ec2_instance_type: 't2.micro'
 ec2_region: 'us-east-1'
 ec2_keypair_state: 'present'
+ec2_groups_state: 'present'
+ec2_groups:
+  - 'ssh_global'
 cached_ec2_vms: {}
 ec2_regions: []

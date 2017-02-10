@@ -5,6 +5,7 @@
   vars:
   - ec2_state: absent
   - ec2_keypair_state: absent
+  - ec2_groups_state: absent
   - cloud:
       aws:
         ec2:
