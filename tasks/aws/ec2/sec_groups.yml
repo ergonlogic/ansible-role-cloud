@@ -1,6 +1,10 @@
 ---
 
-- name: Create a security group that allows SSH access.
+# We cannot assign a security group to an instance before the group is created.
+# So, this task needs to precede the creation of EC2 instances. Likewise for
+# removal (see: sec_groups_cleanup.yml).
+
+- name: Create a security group to allow SSH access.
   ec2_group:
     name: 'ssh_global'
     description: 'Allow SSH access from anywhere.'
@@ -10,5 +14,5 @@
         from_port: 22
         to_port: 22
         cidr_ip: 0.0.0.0/0
-    state: "{{ ec2_groups_state }}"
   with_items: "{{ ec2_regions }}"
+  when: ec2_groups_state == 'present'

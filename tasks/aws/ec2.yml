@@ -28,6 +28,9 @@
   static: false
   when: cached_ec2_vms != {}
 
+- name: Include tasks to remove unused EC2 security groups.
+  include: ec2/sec_groups_cleanup.yml
+
 - name: Include tasks to set hostnames of EC2 VMs.
   include: ec2/hostnames.yml
   static: false

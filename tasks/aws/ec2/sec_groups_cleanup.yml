@@ -1,0 +1,14 @@
+---
+
+# We cannot remove a security group if any instances are using it. So, this
+# task needs to follow the removal of EC2 instances. Likewise for creation
+# (see: sec_groups.yml).
+
+- name: Remove SSH access security group.
+  ec2_group:
+    name: 'ssh_global'
+    description: 'Allow SSH access from anywhere.'
+    region: "{{ item }}"
+    state: 'absent'
+  with_items: "{{ ec2_regions }}"
+  when: ec2_groups_state == 'absent'
