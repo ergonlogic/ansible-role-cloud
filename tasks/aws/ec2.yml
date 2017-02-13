@@ -21,7 +21,7 @@
   include: ec2/sec_groups.yml
 
 - name: Include tasks to ensure the proper state and group of EC2 VMs.
-  include: ec2/ensure.yml
+  include: ec2/instances.yml
 
 - name: Include tasks to remove unused EC2 security groups.
   include: ec2/sec_groups_cleanup.yml

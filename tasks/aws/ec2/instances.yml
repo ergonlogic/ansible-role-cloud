@@ -39,3 +39,11 @@
     status: "{{ item.instances.0.state }}"
   when: item.changed
   with_items: "{{ managed_ec2_vms.results }}"
+
+- name: Wait for SSH to become available on newly created VMs
+  wait_for:
+    host: "{{ item.instances.0.public_ip }}"
+    port: 22
+  when: (item.instances is defined) and (item.instances.0.state == 'running')
+  with_items: "{{ managed_ec2_vms.results }}"
+
