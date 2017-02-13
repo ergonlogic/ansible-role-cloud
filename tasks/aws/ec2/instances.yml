@@ -18,7 +18,7 @@
     image: "{{ item.value.image | default(ec2_image) }}"
     groups: "{{ item.value.groups | default(ec2_groups) }}"
     key_name: "{{ item.value.key_name | default(ec2_key_name) }}"
-    wait: yes
+    wait: "{{ (item.value.state == 'absent') | ternary('no','yes') }}"
   register: managed_ec2_vms
   with_dict: "{{ cloud.aws.ec2 }}"
 
