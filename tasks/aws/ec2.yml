@@ -20,13 +20,8 @@
 - name: Include tasks to create missing EC2 security groups.
   include: ec2/sec_groups.yml
 
-- name: Include tasks to create missing EC2 VMs.
-  include: ec2/create.yml
-
 - name: Include tasks to ensure the proper state and group of EC2 VMs.
   include: ec2/ensure.yml
-  static: false
-  when: cached_ec2_vms != {}
 
 - name: Include tasks to remove unused EC2 security groups.
   include: ec2/sec_groups_cleanup.yml
