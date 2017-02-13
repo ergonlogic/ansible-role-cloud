@@ -12,3 +12,4 @@
     state: 'absent'
   with_items: "{{ ec2_regions }}"
   when: ec2_groups_state == 'absent'
+  ignore_errors: yes
